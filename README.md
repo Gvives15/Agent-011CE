@@ -3,7 +3,6 @@
 `o11ce-cli` instala el comando `o11ce` para:
 
 - levantar/bajar el runtime vía Docker Compose (`o11ce up`, `o11ce down`, `o11ce status`)
-- chatear con streaming SSE contra el runtime (`o11ce chat`)
 
 ## Requisitos
 
@@ -45,7 +44,7 @@ o11ce up
 Chat:
 
 ```bash
-o11ce chat
+o11ce status
 ```
 
 Bajar runtime:
@@ -53,16 +52,6 @@ Bajar runtime:
 ```bash
 o11ce down
 ```
-
-## Comandos del chat (V1)
-
-- `/help`
-- `/model <logic|vision|ui-tars|auto>`
-- `/profile <dev|browser|server>`
-- `/debug`
-- `/logs [n]`
-- `/reset`
-- `/exit`
 
 ## Imágenes Docker
 
@@ -75,4 +64,35 @@ Ejemplo:
 
 ```bash
 export O11CE_AGENT_IMAGE="ghcr.io/o11ce/open-peak-agent:0.1.0"
+```
+
+## Build y publicación en PyPI
+
+Prerequisitos:
+
+- Tener cuenta en PyPI
+- Tener token de API de PyPI
+
+### Configurar credenciales (recomendado)
+
+Crear `~/.pypirc`:
+
+```ini
+[pypi]
+username = __token__
+password = <TU_TOKEN_DE_PYPI>
+```
+
+### Construir
+
+```bash
+python -m pip install -U build
+python -m build
+```
+
+### Subir
+
+```bash
+python -m pip install -U twine
+python -m twine upload dist/*
 ```

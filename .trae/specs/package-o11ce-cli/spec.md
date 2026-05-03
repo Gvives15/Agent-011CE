@@ -8,9 +8,7 @@ Hoy el agente requiere clonar/ejecutar el repo. Para que cualquiera pueda instal
 - Incluir en el paquete un template de Compose que corre el runtime (Django Ninja) como contenedores preconstruidos (imágenes publicadas).
 - Implementar un CLI Python que:
   - gestione `up/down/status/logs` del stack vía Docker Compose
-  - inicie un chat interactivo que cree runs y consuma SSE del runtime
-  - soporte confirmación de acciones sensibles (`proposed_action`) y abort (`Ctrl+C`)
-- Documentar flujo de build y publicación en PyPI (y prerequisito: publicar imágenes Docker del runtime).
+- Documentar flujo de build y publicación en PyPI (incluyendo `.pypirc`/Twine sin exponer secretos y prerequisito de imágenes Docker publicadas).
 
 ## Impact
 - Affected specs: V1 runtime API (se consume tal cual; no se modifica), distribución/instalación, UX de CLI.
@@ -51,51 +49,21 @@ El comando `o11ce` SHALL poder levantar y bajar el runtime (agent-runtime y, opc
 - **THEN** el CLI detiene los contenedores del stack
 - **AND** retorna exit code `0`
 
-### Requirement: Chat interactivo (cliente HTTP+SSE)
-El comando `o11ce chat` SHALL iniciar un REPL interactivo que envía mensajes al runtime y muestra la respuesta por streaming SSE.
-
-#### Details
-- Base URL default: `http://127.0.0.1:8000` (configurable por env/flag).
-- El chat SHALL usar:
-  - `POST /v1/runs` para crear un run
-  - `GET /v1/runs/{id}/events` para consumir SSE
-- El chat SHALL mostrar el stream de `token` incrementalmente.
-- El chat SHALL mantener un “footer” mínimo con:
-  - route, model, profile, runtime status, tokens/costo acumulado (si `usage` presente)
-- El chat SHALL soportar comandos mínimos:
-  - `/help`, `/debug`, `/logs [n]`, `/reset`, `/exit`
-  - `/model <logic|vision|ui-tars|auto>` (mapea a `options.vision` + `options.preferred_model`)
-  - `/profile <dev|browser|server>` (mapea a `options.profile`)
-
-#### Scenario: Streaming exitoso
-- **WHEN** el usuario escribe un mensaje en el REPL
-- **THEN** el CLI crea un run y abre SSE
-- **AND** imprime `token` events incrementalmente
-- **AND** finaliza al recibir `final`
-
-### Requirement: Confirmación de acciones sensibles
-Cuando el runtime emite `proposed_action`, el CLI SHALL pedir confirmación explícita al usuario y responder con `POST /v1/runs/{id}/actions/{action_id}/approve`.
-
-#### Scenario: Aprobar acción
-- **WHEN** el CLI recibe `proposed_action` con `requires_confirmation=true`
-- **AND** el usuario responde “Y”
-- **THEN** el CLI envía `{ "approved": true }`
-- **AND** renderiza `action_result` si llega
-
-### Requirement: Abort inteligente (Ctrl+C)
-Durante streaming, `Ctrl+C` SHALL abortar el run actual sin cerrar el proceso del CLI.
-
-#### Scenario: Abort
-- **WHEN** el usuario presiona `Ctrl+C` durante un run activo
-- **THEN** el CLI llama `POST /v1/runs/{id}/abort`
-- **AND** vuelve al prompt
-
 ### Requirement: Configuración y secretos
 El CLI SHALL manejar secretos sin exponerlos.
 
 #### Details
 - `OPENROUTER_API_KEY` SHALL almacenarse en el `.env` local del usuario o variables de entorno del proceso, pero nunca en logs.
 - El CLI SHALL evitar imprimir variables con nombres que contengan `KEY`, `TOKEN` o `SECRET`.
+
+### Requirement: Credenciales PyPI sin interacción
+El proyecto SHALL soportar publicación a PyPI sin pegar credenciales en cada release, usando un archivo `.pypirc` local del desarrollador (o variables de entorno) y Twine.
+
+#### Scenario: Configurar `.pypirc`
+- **WHEN** el desarrollador crea `~/.pypirc` con `username=__token__` y `password=<token>`
+- **THEN** `python -m twine upload dist/*` usa esas credenciales sin prompt interactivo
+ 
+## MODIFIED Requirements
 
 ## MODIFIED Requirements
 
