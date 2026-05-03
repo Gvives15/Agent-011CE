@@ -1,0 +1,4 @@
+runtime:
+  sse: true
+  browser_profile: optional
+

@@ -1,0 +1,5 @@
+models:
+  logical: deepseek/deepseek-chat
+  vision_default: meta-llama/llama-3.2-11b-vision-instruct
+  vision_advanced: bytedance/ui-tars-72b
+
