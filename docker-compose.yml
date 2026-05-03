@@ -1,0 +1,36 @@
+services:
+  agent-runtime:
+    build:
+      context: .
+      dockerfile: docker/agent/Dockerfile
+    environment:
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - PROFILE=${PROFILE:-dev}
+      - ENABLE_BROWSER_AUTOMATION=${ENABLE_BROWSER_AUTOMATION:-false}
+      - ENABLE_VISION_STEPS=${ENABLE_VISION_STEPS:-true}
+      - OPEN_PEAK_CONFIG_DIR=/app/config
+    ports:
+      - "${RUNTIME_PORT:-8000}:8000"
+    volumes:
+      - ./workspace:/workspace:rw
+      - ./logs:/logs:rw
+      - ./cache:/cache:rw
+      - ./tmp:/tmp:rw
+      - ./config:/app/config:ro
+    profiles:
+      - dev
+      - server
+      - browser
+
+  browser-runtime:
+    build:
+      context: .
+      dockerfile: docker/browser/Dockerfile
+    ports:
+      - "${BROWSER_PORT:-8001}:8001"
+    volumes:
+      - ./workspace:/workspace:rw
+      - ./tmp:/tmp:rw
+    shm_size: "1gb"
+    profiles:
+      - browser

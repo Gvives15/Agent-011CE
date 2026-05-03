@@ -1,0 +1,13 @@
+models:
+  logic:
+    id: deepseek/deepseek-chat
+    input_usd_per_million_tokens: 0.0
+    output_usd_per_million_tokens: 0.0
+  vision:
+    id: meta-llama/llama-3.2-11b-vision-instruct
+    input_usd_per_million_tokens: 0.0
+    output_usd_per_million_tokens: 0.0
+  ui:
+    id: bytedance/ui-tars-72b
+    input_usd_per_million_tokens: 0.0
+    output_usd_per_million_tokens: 0.0

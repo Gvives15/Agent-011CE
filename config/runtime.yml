@@ -1,0 +1,22 @@
+runtime:
+  sse:
+    max_events: 1000
+    max_age_seconds: 60
+  attachments:
+    max_attach_bytes: 1000000
+    max_attach_lines: 2000
+  openrouter:
+    base_url: https://openrouter.ai/api/v1
+    timeout_seconds: 60
+    max_retries_per_run: 2
+  safety:
+    allowed_roots:
+      - /workspace
+      - /tmp
+      - /cache
+      - /logs
+    deny_commands:
+      - mkfs
+      - dd
+      - shutdown
+      - reboot
