@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "o11ce-cli"
+name = "o11ce34345-3434-aiggbma" 
 version = "0.1.0"
 description = "CLI instalable por pip para gestionar runtime vía Docker Compose y chatear por SSE."
 readme = "README.md"
