@@ -7,8 +7,10 @@ COPY runtime/agent/requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
 COPY runtime/agent /app
+COPY config /app/config
 
 ENV PYTHONUNBUFFERED=1
+ENV OPEN_PEAK_CONFIG_DIR=/app/config
 EXPOSE 8000
 
 USER appuser

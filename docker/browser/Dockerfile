@@ -7,6 +7,7 @@ COPY runtime/browser/requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
 COPY runtime/browser /app
+COPY config /app/config
 
 EXPOSE 8001
 USER appuser
