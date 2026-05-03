@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "o11ce-cli"
+version = "0.1.0"
+description = "CLI instalable por pip para gestionar runtime vía Docker Compose y chatear por SSE."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "requests>=2.32.0",
+  "python-dotenv>=1.0.1",
+  "rich>=13.9.0",
+]
+
+[project.scripts]
+o11ce = "o11ce_cli.main:main"
+
+[tool.setuptools]
+packages = ["o11ce_cli"]
+
+[tool.setuptools.package-data]
+o11ce_cli = ["assets/*.yml"]

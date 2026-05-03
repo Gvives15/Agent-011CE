@@ -1,0 +1,8 @@
+- [ ] `pip install -e .` instala el paquete y `o11ce --help` funciona
+- [ ] `o11ce up` levanta el stack vía Docker Compose o falla con error claro si Docker no está disponible
+- [ ] `o11ce down` detiene el stack sin borrar datos del usuario
+- [ ] `o11ce chat` crea runs (`POST /v1/runs`) y consume SSE (`/events`) mostrando `token` streaming
+- [ ] `Ctrl+C` durante streaming llama `/abort` y vuelve al prompt sin salir del proceso
+- [ ] `proposed_action` requiere confirmación Y/n y se envía `/approve`; se muestra `action_result`
+- [ ] Se crea directorio local de trabajo con `.env` y volúmenes (workspace/logs/cache/tmp)
+- [ ] No se imprimen ni loguean secretos (`OPENROUTER_API_KEY` ni env vars con KEY/TOKEN/SECRET)

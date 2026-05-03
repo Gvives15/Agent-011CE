@@ -1,0 +1,27 @@
+services:
+  agent-runtime:
+    image: ${O11CE_AGENT_IMAGE:-ghcr.io/o11ce/open-peak-agent:0.1.0}
+    environment:
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - PROFILE=${PROFILE:-dev}
+      - ENABLE_BROWSER_AUTOMATION=${ENABLE_BROWSER_AUTOMATION:-false}
+      - ENABLE_VISION_STEPS=${ENABLE_VISION_STEPS:-true}
+      - OPEN_PEAK_CONFIG_DIR=/app/config
+    ports:
+      - "${RUNTIME_PORT:-8000}:8000"
+    volumes:
+      - ./volumes/workspace:/workspace:rw
+      - ./volumes/logs:/logs:rw
+      - ./volumes/cache:/cache:rw
+      - ./volumes/tmp:/tmp:rw
+    restart: unless-stopped
+
+  browser-runtime:
+    image: ${O11CE_BROWSER_IMAGE:-ghcr.io/o11ce/open-peak-browser:0.1.0}
+    ports:
+      - "${BROWSER_PORT:-8001}:8001"
+    volumes:
+      - ./volumes/workspace:/workspace:rw
+      - ./volumes/tmp:/tmp:rw
+    shm_size: "1gb"
+    restart: unless-stopped
